@@ -1,0 +1,53 @@
+{
+  "mqtt": {
+    "host": "192.168.1.253",
+    "port": 1883,
+    "username": "",
+    "password": "",
+    "keepalive": 30,
+    "base_topic": "boxchat",
+    "command_mode": "direct"
+  },
+  "web": {
+    "host": "0.0.0.0",
+    "port": 8080
+  },
+  "boards": [
+    {
+      "id": 32001,
+      "name": "Doll-Office Lights",
+      "kind": "rgbw",
+      "power_relay": 32002,
+      "group": [32003, 32005]
+    },
+    {
+      "id": 32002,
+      "name": "Doll-Office Relay",
+      "kind": "relay",
+      "command_mode": "shared"
+    },
+    {
+      "id": 32003,
+      "name": "Mnemerynne Server",
+      "kind": "rgbw"
+    },
+    {
+      "id": 32004,
+      "name": "Living Room Lights",
+      "kind": "rgbw",
+      "zones": ["Left", "Right"],
+      "power_relay": 32007
+    },
+    {
+      "id": 32005,
+      "name": "Cync Strip",
+      "kind": "rgbw"
+    },
+    {
+      "id": 32007,
+      "name": "Living Room Lamp",
+      "kind": "relay",
+      "command_mode": "direct"
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10131a">
+    <title>Light Console</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <div class="crt-overlay" aria-hidden="true"></div>
+    <p class="system-banner">* LOCAL LIGHTING TERMINAL // PRIVATE NETWORK LINK *</p>
+    <main class="shell">
+      <aside class="system-rail">
+        <div class="pixel-heart" aria-hidden="true">♡</div>
+        <p class="eyebrow">DOLL-LIGHT SYSTEM</p>
+        <h1>LIGHT<br>CONSOLE</h1>
+        <p class="subtitle">QuinLED interface<br>RGBW / local only</p>
+
+        <div class="connection-card" aria-live="polite">
+          <span id="connection-dot" class="connection-dot"></span>
+          <div>
+            <strong id="connection-label">Connecting</strong>
+            <small id="broker-label">MQTT broker</small>
+          </div>
+        </div>
+        <div class="rail-readout">
+          <span>&gt; ACCESS</span>
+          <strong>LAN ONLY</strong>
+          <span>&gt; PROTOCOL</span>
+          <strong>MQTT 3.1.1</strong>
+          <span>&gt; DISPLAY</span>
+          <strong>RGBW</strong>
+        </div>
+        <div class="rail-face" aria-hidden="true">:(</div>
+        <p class="rail-version">LIGHT.OS V-1.0</p>
+      </aside>
+
+      <section class="workspace">
+        <header class="window-titlebar">
+          <span>&gt;LIGHTS/CONTROL</span>
+          <span class="window-glyphs">[ _ ] [ □ ] [ × ]</span>
+        </header>
+
+        <div class="workspace-inner">
+          <section class="toolbar" aria-label="Global controls">
+            <div>
+              <span class="toolbar-label">NOTICE BOARD</span>
+              <span id="board-count" class="toolbar-detail">Loading boards…</span>
+            </div>
+            <button id="all-off" class="danger-button" type="button">
+              <span aria-hidden="true">■</span>
+              ALL OFF
+            </button>
+          </section>
+
+          <section id="boards" class="board-grid" aria-live="polite"></section>
+
+          <footer>
+            <span>LOCAL CONTROL ONLY :3</span>
+            <span id="command-mode">Waiting for configuration</span>
+          </footer>
+        </div>
+      </section>
+    </main>
+
+    <template id="board-template">
+      <article class="board-card">
+        <div class="board-heading">
+          <div>
+            <p class="board-id">&gt;</p>
+            <h2 class="board-name"></h2>
+          </div>
+          <div class="board-status">
+            <span class="board-status-dot"></span>
+            <span class="board-status-text">Unknown</span>
+          </div>
+        </div>
+
+        <!-- Filled by app.js only for boards with more than one zone. -->
+        <div class="zone-tabs" role="group" aria-label="Choose which zones the controls change" hidden></div>
+
+        <div class="color-stage">
+          <div class="color-glow"></div>
+          <label class="picker-label">
+            &gt; RGB COLOR
+            <input class="color-picker" type="color" value="#000000">
+          </label>
+          <div class="numeric-color" aria-live="polite">R 0 · G 0 · B 0 · W 0</div>
+        </div>
+
+        <div class="zone-swatches" aria-label="Current color of each zone" hidden></div>
+
+        <div class="sliders"></div>
+
+        <div class="presets" aria-label="Color presets">
+          <button type="button" data-color="0,0,0,0">[ OFF ]</button>
+          <button type="button" data-color="255,72,12,0">[ SUNSET ]</button>
+          <button type="button" data-color="166,0,255,0">[ VIOLET ]</button>
+          <button type="button" data-color="0,180,255,0">[ AQUA ]</button>
+          <button type="button" data-color="0,0,0,220">[ WHITE ]</button>
+        </div>
+        <p class="board-feedback" aria-live="polite">Ready for commands</p>
+      </article>
+    </template>
+
+    <template id="relay-template">
+      <article class="board-card relay-card">
+        <div class="board-heading">
+          <div>
+            <p class="board-id">&gt;</p>
+            <h2 class="board-name"></h2>
+          </div>
+          <div class="board-status">
+            <span class="board-status-dot"></span>
+            <span class="board-status-text">No command sent</span>
+          </div>
+        </div>
+
+        <div class="relay-stage">
+          <span class="relay-symbol" aria-hidden="true">01</span>
+          <div>
+            <p class="relay-label">&gt; SWITCHED POWER</p>
+            <strong class="relay-state">UNKNOWN</strong>
+            <small>Last command shown; receiver has no state telemetry.</small>
+          </div>
+        </div>
+
+        <div class="relay-controls" aria-label="Relay power controls">
+          <button class="relay-on" type="button" data-power="true">[ LIGHTS ON ]</button>
+          <button class="relay-off" type="button" data-power="false">[ LIGHTS OFF ]</button>
+        </div>
+        <p class="board-feedback" aria-live="polite">Ready for commands</p>
+      </article>
+    </template>
+
+    <dialog id="access-dialog">
+      <form method="dialog">
+        <h2>Light Console access</h2>
+        <p>Enter a valid access token. A control token enables lighting changes; a read token only shows status.</p>
+        <label for="access-token">Access token</label>
+        <input id="access-token" type="password" autocomplete="off" required autofocus>
+        <div><button value="connect">Connect</button> <button value="cancel" formnovalidate>Cancel</button></div>
+      </form>
+    </dialog>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+__pycache__/
+*.py[cod]
+logs/
+python/cync_secrets.json
+lcd_keypad/lcd_keypad_esp32/secrets.h

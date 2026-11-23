@@ -1,0 +1,63 @@
+{
+  "format": "mnemerynne-api-template",
+  "name": "Light Console (read)",
+  "base_url": "https://lights.example.invalid",
+  "auth_type": "bearer",
+  "one_at_a_time": true,
+  "description": "Light Console controls the configured RGBW and relay boards. Configure distinct random LIGHT_CONSOLE_READ_TOKEN and LIGHT_CONSOLE_CONTROL_TOKEN environment variables (at least 32 characters each) on the Light Console process and restart it. Never put credentials in this file. Set this API's base URL to the address reachable from the Erinne server, not localhost unless both services run on the same host. Use an HTTPS reverse proxy when sending credentials across a network; Light Console itself serves HTTP. For a private certificate, compare the SHA-256 fingerprint with the certificate on the proxy before pinning it in Access > APIs. On that host: openssl x509 -in server.crt -noout -fingerprint -sha256. Assign your lighting operators' AD group in Erinne. Responses contain configured light names, IDs, telemetry and timestamps; names may identify private rooms. Leave Claude access off unless those names may be sent to Anthropic. Discover IDs with List lights; never infer them from example questions. An RGBW light may list named zones (for example Left and Right): pass that zone number to change one, or leave zone empty to change every zone together. Relay lights cannot change color. A 202 response means queued, not physically confirmed. Check Light state after changes; reported RGBW telemetry can be retained/stale, while relay power is only the last command. Paste LIGHT_CONSOLE_READ_TOKEN as this entry's Bearer credential. It cannot make changes.",
+  "operations": [
+    {
+      "name": "List lights",
+      "method": "GET",
+      "path": "/api/lights",
+      "cache_seconds": 0,
+      "description": "Discover every configured light's ID, name, RGBW/relay capabilities, named zones (e.g. Left and Right) and current reported state; use next_offset for another page.",
+      "params": [
+        {
+          "name": "offset",
+          "type": "int",
+          "in": "query",
+          "min": 0,
+          "default": 0
+        },
+        {
+          "name": "limit",
+          "type": "int",
+          "in": "query",
+          "min": 1,
+          "max": 100,
+          "default": 100
+        }
+      ],
+      "example_questions": [
+        "Which lights can you control?",
+        "Find the light in my room.",
+        "Which lights support color?",
+        "List the configured lighting boards."
+      ]
+    },
+    {
+      "name": "Light state",
+      "method": "GET",
+      "path": "/api/lights/{light_id}",
+      "cache_seconds": 0,
+      "description": "Read one discovered light, including color capability, MQTT connection, last reported RGBW values for each zone (top-level values are null when zones differ) or last commanded relay power, and telemetry time.",
+      "params": [
+        {
+          "name": "light_id",
+          "type": "int",
+          "in": "path",
+          "required": true,
+          "min": 32001,
+          "help": "Exact light ID from List lights; match the requested name first"
+        }
+      ],
+      "example_questions": [
+        "What color is light 32001 reporting?",
+        "Is the relay light on?",
+        "When did this light last report its state?",
+        "Check the bedroom light before changing it."
+      ]
+    }
+  ]
+}

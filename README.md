@@ -145,6 +145,15 @@ Start it on Windows with `py python/app.py`, then open `http://localhost:8080`. 
 
 For automatic startup before Windows sign-in, use `ps/install_light_console_startup.ps1` from an administrator PowerShell with your Python interpreter path. See [boot installation and task management](python/README.md#start-automatically-at-windows-boot).
 
+## Cardputer remote (DOLL-REMOTE)
+
+`DOLL-REMOTE/` is firmware for the M5Stack Cardputer ADV (ESP32-S3), a slim fork of DOLL-OS. It's a pocket controller with two apps, switched with the G0 button (tap to switch, hold 3 s for the shell):
+
+- **Lights:** a boxchat client like the master keypad console. It shows a scrolling list of rooms (1–4 zones each, with live swatches from the retained state), lets you change levels per channel or zone, has a numbered scene menu, power relays and ALL OFF. Lights and scenes are the `lightUnits[]` and `LIGHTS_SCENES[]` tables at the top of `DOLL-REMOTE/Lights.ino`. Keep them in step with `python/config.json` when rooms are added.
+- **Mnemerynne Media remote:** pairs with the Mnemerynne server and drives its TVs.
+
+It follows the zone standard above, publishes only to `boxchat/<id>/set` (and the shared `boxchat` topic for relay 32002), and needs no activator number of its own. Build with the `stamps3` profile in `DOLL-REMOTE/sketch.yaml` (libraries pinned by version). Setup, keys and flashing are in [DOLL-REMOTE/docs/REMOTE.md](DOLL-REMOTE/docs/REMOTE.md).
+
 ## Erinne lighting API
 
 The companion app provides authenticated light discovery (including each light's named zones), RGBW color/channel changes for one zone or all zones, and power control for all configured boards. Importable read/control templates match the API contract in `C:\scripts\erinne`. See [setup and API documentation](python/ERINNE_API.md).

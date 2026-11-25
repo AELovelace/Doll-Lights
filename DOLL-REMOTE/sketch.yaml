@@ -1,0 +1,27 @@
+# Build profile for DOLL-REMOTE (the Mnemerynne remote fork of DOLL-OS). Select
+# "stamps3" from the profile dropdown in the Arduino IDE before Verify/Upload;
+# arduino-cli picks it up automatically (default_profile below).
+#
+# Same board, flash size, partition table and core as DOLL-OS, with two differences:
+#   USBMode=hwcdc -> the S3's built-in USB serial/JTAG. DOLL-OS needs TinyUSB
+#                    ("default") for USB mass storage; this fork has no USB MSC, so
+#                    the TinyUSB stack (and its RAM) is left out.
+#   libraries     -> only what the remote and Motoko (MQTT, for the lights) use.
+#                    No BLE, SSH, ping, ARP or FTP.
+default_profile: stamps3
+
+profiles:
+  stamps3:
+    fqbn: esp32:esp32:m5stack_stamp_s3:FlashSize=8M,PartitionScheme=custom,PSRAM=disabled,USBMode=hwcdc,CDCOnBoot=cdc
+    platforms:
+      - platform: esp32:esp32 (3.3.10)
+    libraries:
+      # Pinned by name and version, so the sketch builds from any folder (it lives in
+      # the Doll-Lights repo, outside the Arduino sketchbook). arduino-cli downloads
+      # exactly these on the first build. These are the versions it was first built
+      # and flashed with on 2026-11-23.
+      - M5Cardputer (1.1.1)
+      - M5Unified (0.2.18)
+      - M5GFX (0.2.25)
+      - ArduinoJson (7.4.3)
+      - PubSubClient (2.8)
